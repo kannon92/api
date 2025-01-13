@@ -1105,6 +1105,10 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"github.com/openshift/api/operator/v1alpha1.ImageContentSourcePolicy":                                schema_openshift_api_operator_v1alpha1_ImageContentSourcePolicy(ref),
 		"github.com/openshift/api/operator/v1alpha1.ImageContentSourcePolicyList":                            schema_openshift_api_operator_v1alpha1_ImageContentSourcePolicyList(ref),
 		"github.com/openshift/api/operator/v1alpha1.ImageContentSourcePolicySpec":                            schema_openshift_api_operator_v1alpha1_ImageContentSourcePolicySpec(ref),
+		"github.com/openshift/api/operator/v1alpha1.Kueue":                                                   schema_openshift_api_operator_v1alpha1_Kueue(ref),
+		"github.com/openshift/api/operator/v1alpha1.KueueConfiguration":                                      schema_openshift_api_operator_v1alpha1_KueueConfiguration(ref),
+		"github.com/openshift/api/operator/v1alpha1.KueueOperandSpec":                                        schema_openshift_api_operator_v1alpha1_KueueOperandSpec(ref),
+		"github.com/openshift/api/operator/v1alpha1.KueueStatus":                                             schema_openshift_api_operator_v1alpha1_KueueStatus(ref),
 		"github.com/openshift/api/operator/v1alpha1.LoggingConfig":                                           schema_openshift_api_operator_v1alpha1_LoggingConfig(ref),
 		"github.com/openshift/api/operator/v1alpha1.NodeStatus":                                              schema_openshift_api_operator_v1alpha1_NodeStatus(ref),
 		"github.com/openshift/api/operator/v1alpha1.OLM":                                                     schema_openshift_api_operator_v1alpha1_OLM(ref),
@@ -1115,6 +1119,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"github.com/openshift/api/operator/v1alpha1.OperatorSpec":                                            schema_openshift_api_operator_v1alpha1_OperatorSpec(ref),
 		"github.com/openshift/api/operator/v1alpha1.OperatorStatus":                                          schema_openshift_api_operator_v1alpha1_OperatorStatus(ref),
 		"github.com/openshift/api/operator/v1alpha1.RepositoryDigestMirrors":                                 schema_openshift_api_operator_v1alpha1_RepositoryDigestMirrors(ref),
+		"github.com/openshift/api/operator/v1alpha1.SecondarySchedulerList":                                  schema_openshift_api_operator_v1alpha1_SecondarySchedulerList(ref),
 		"github.com/openshift/api/operator/v1alpha1.StaticPodOperatorStatus":                                 schema_openshift_api_operator_v1alpha1_StaticPodOperatorStatus(ref),
 		"github.com/openshift/api/operator/v1alpha1.VersionAvailability":                                     schema_openshift_api_operator_v1alpha1_VersionAvailability(ref),
 		"github.com/openshift/api/operatorcontrolplane/v1alpha1.LogEntry":                                    schema_openshift_api_operatorcontrolplane_v1alpha1_LogEntry(ref),
@@ -1559,6 +1564,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"k8s.io/apimachinery/pkg/runtime.TypeMeta":                                                           schema_k8sio_apimachinery_pkg_runtime_TypeMeta(ref),
 		"k8s.io/apimachinery/pkg/runtime.Unknown":                                                            schema_k8sio_apimachinery_pkg_runtime_Unknown(ref),
 		"k8s.io/apimachinery/pkg/util/intstr.IntOrString":                                                    schema_apimachinery_pkg_util_intstr_IntOrString(ref),
+		"k8s.io/apimachinery/pkg/version.Info":                                                               schema_k8sio_apimachinery_pkg_version_Info(ref),
 	}
 }
 
@@ -56645,6 +56651,221 @@ func schema_openshift_api_operator_v1alpha1_ImageContentSourcePolicySpec(ref com
 	}
 }
 
+func schema_openshift_api_operator_v1alpha1_Kueue(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Description: "spec holds user settable values for configuration",
+							Default:     map[string]interface{}{},
+							Ref:         ref("github.com/openshift/api/operator/v1alpha1.KueueOperandSpec"),
+						},
+					},
+					"status": {
+						SchemaProps: spec.SchemaProps{
+							Description: "status holds observed values from the cluster. They may not be overridden.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("github.com/openshift/api/operator/v1alpha1.KueueStatus"),
+						},
+					},
+				},
+				Required: []string{"spec"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/openshift/api/operator/v1alpha1.KueueOperandSpec", "github.com/openshift/api/operator/v1alpha1.KueueStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+	}
+}
+
+func schema_openshift_api_operator_v1alpha1_KueueConfiguration(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"waitForPodsReady": {
+						SchemaProps: spec.SchemaProps{
+							Description: "WaitForPodsReady configures gang admission optional",
+							Ref:         ref("sigs.k8s.io/kueue/apis/config/v1beta1.WaitForPodsReady"),
+						},
+					},
+					"integrations": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Integrations are the types of integrations Kueue will manager Required",
+							Default:     map[string]interface{}{},
+							Ref:         ref("sigs.k8s.io/kueue/apis/config/v1beta1.Integrations"),
+						},
+					},
+					"featureGates": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Feature gates are advanced features for Kueue",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: false,
+										Type:    []string{"boolean"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"integrations"},
+			},
+		},
+		Dependencies: []string{
+			"sigs.k8s.io/kueue/apis/config/v1beta1.Integrations", "sigs.k8s.io/kueue/apis/config/v1beta1.WaitForPodsReady"},
+	}
+}
+
+func schema_openshift_api_operator_v1alpha1_KueueOperandSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"config": {
+						SchemaProps: spec.SchemaProps{
+							Description: "The config that is persisted to a config map",
+							Default:     map[string]interface{}{},
+							Ref:         ref("github.com/openshift/api/operator/v1alpha1.KueueConfiguration"),
+						},
+					},
+					"image": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Image",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"config", "image"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/openshift/api/operator/v1alpha1.KueueConfiguration"},
+	}
+}
+
+func schema_openshift_api_operator_v1alpha1_KueueStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "KueueStatus defines the observed state of Kueue",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"observedGeneration": {
+						SchemaProps: spec.SchemaProps{
+							Description: "observedGeneration is the last generation change you've dealt with",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"conditions": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-map-keys": []interface{}{
+									"type",
+								},
+								"x-kubernetes-list-type": "map",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "conditions is a list of conditions and their status",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/openshift/api/operator/v1.OperatorCondition"),
+									},
+								},
+							},
+						},
+					},
+					"version": {
+						SchemaProps: spec.SchemaProps{
+							Description: "version is the level this availability applies to",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"readyReplicas": {
+						SchemaProps: spec.SchemaProps{
+							Description: "readyReplicas indicates how many replicas are ready and at the desired state",
+							Default:     0,
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"latestAvailableRevision": {
+						SchemaProps: spec.SchemaProps{
+							Description: "latestAvailableRevision is the deploymentID of the most recent deployment",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"generations": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-map-keys": []interface{}{
+									"group",
+									"resource",
+									"namespace",
+									"name",
+								},
+								"x-kubernetes-list-type": "map",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "generations are used to determine when an item needs to be reconciled or has changed in a way that needs a reaction.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/openshift/api/operator/v1.GenerationStatus"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"readyReplicas"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/openshift/api/operator/v1.GenerationStatus", "github.com/openshift/api/operator/v1.OperatorCondition"},
+	}
+}
+
 func schema_openshift_api_operator_v1alpha1_LoggingConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -57176,6 +57397,55 @@ func schema_openshift_api_operator_v1alpha1_RepositoryDigestMirrors(ref common.R
 				Required: []string{"source"},
 			},
 		},
+	}
+}
+
+func schema_openshift_api_operator_v1alpha1_SecondarySchedulerList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "KueueList contains a list of SecondaryScheduler",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/openshift/api/operator/v1alpha1.Kueue"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"items"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/openshift/api/operator/v1alpha1.Kueue", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
 	}
 }
 
@@ -81569,4 +81839,81 @@ func schema_apimachinery_pkg_util_intstr_IntOrString(ref common.ReferenceCallbac
 			},
 		},
 	})
+}
+
+func schema_k8sio_apimachinery_pkg_version_Info(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "Info contains versioning information. how we'll want to distribute that information.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"major": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"minor": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"gitVersion": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"gitCommit": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"gitTreeState": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"buildDate": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"goVersion": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"compiler": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"platform": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+				},
+				Required: []string{"major", "minor", "gitVersion", "gitCommit", "gitTreeState", "buildDate", "goVersion", "compiler", "platform"},
+			},
+		},
+	}
 }

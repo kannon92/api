@@ -33103,6 +33103,136 @@
         }
       }
     },
+    "com.github.openshift.api.operator.v1alpha1.Kueue": {
+      "type": "object",
+      "required": [
+        "spec"
+      ],
+      "properties": {
+        "apiVersion": {
+          "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+          "type": "string"
+        },
+        "kind": {
+          "description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+          "type": "string"
+        },
+        "metadata": {
+          "default": {},
+          "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ObjectMeta"
+        },
+        "spec": {
+          "description": "spec holds user settable values for configuration",
+          "default": {},
+          "$ref": "#/definitions/com.github.openshift.api.operator.v1alpha1.KueueOperandSpec"
+        },
+        "status": {
+          "description": "status holds observed values from the cluster. They may not be overridden.",
+          "default": {},
+          "$ref": "#/definitions/com.github.openshift.api.operator.v1alpha1.KueueStatus"
+        }
+      }
+    },
+    "com.github.openshift.api.operator.v1alpha1.KueueConfiguration": {
+      "type": "object",
+      "required": [
+        "integrations"
+      ],
+      "properties": {
+        "featureGates": {
+          "description": "Feature gates are advanced features for Kueue",
+          "type": "object",
+          "additionalProperties": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "integrations": {
+          "description": "Integrations are the types of integrations Kueue will manager Required",
+          "default": {},
+          "$ref": "#/definitions/io.k8s.sigs.kueue.apis.config.v1beta1.Integrations"
+        },
+        "waitForPodsReady": {
+          "description": "WaitForPodsReady configures gang admission optional",
+          "$ref": "#/definitions/io.k8s.sigs.kueue.apis.config.v1beta1.WaitForPodsReady"
+        }
+      }
+    },
+    "com.github.openshift.api.operator.v1alpha1.KueueOperandSpec": {
+      "type": "object",
+      "required": [
+        "config",
+        "image"
+      ],
+      "properties": {
+        "config": {
+          "description": "The config that is persisted to a config map",
+          "default": {},
+          "$ref": "#/definitions/com.github.openshift.api.operator.v1alpha1.KueueConfiguration"
+        },
+        "image": {
+          "description": "Image",
+          "type": "string",
+          "default": ""
+        }
+      }
+    },
+    "com.github.openshift.api.operator.v1alpha1.KueueStatus": {
+      "description": "KueueStatus defines the observed state of Kueue",
+      "type": "object",
+      "required": [
+        "readyReplicas"
+      ],
+      "properties": {
+        "conditions": {
+          "description": "conditions is a list of conditions and their status",
+          "type": "array",
+          "items": {
+            "default": {},
+            "$ref": "#/definitions/com.github.openshift.api.operator.v1.OperatorCondition"
+          },
+          "x-kubernetes-list-map-keys": [
+            "type"
+          ],
+          "x-kubernetes-list-type": "map"
+        },
+        "generations": {
+          "description": "generations are used to determine when an item needs to be reconciled or has changed in a way that needs a reaction.",
+          "type": "array",
+          "items": {
+            "default": {},
+            "$ref": "#/definitions/com.github.openshift.api.operator.v1.GenerationStatus"
+          },
+          "x-kubernetes-list-map-keys": [
+            "group",
+            "resource",
+            "namespace",
+            "name"
+          ],
+          "x-kubernetes-list-type": "map"
+        },
+        "latestAvailableRevision": {
+          "description": "latestAvailableRevision is the deploymentID of the most recent deployment",
+          "type": "integer",
+          "format": "int32"
+        },
+        "observedGeneration": {
+          "description": "observedGeneration is the last generation change you've dealt with",
+          "type": "integer",
+          "format": "int64"
+        },
+        "readyReplicas": {
+          "description": "readyReplicas indicates how many replicas are ready and at the desired state",
+          "type": "integer",
+          "format": "int32",
+          "default": 0
+        },
+        "version": {
+          "description": "version is the level this availability applies to",
+          "type": "string"
+        }
+      }
+    },
     "com.github.openshift.api.operator.v1alpha1.LoggingConfig": {
       "description": "LoggingConfig holds information about configuring logging DEPRECATED: Use v1.LogLevel instead",
       "type": "object",
@@ -33434,6 +33564,34 @@
           "description": "source is the repository that users refer to, e.g. in image pull specifications.",
           "type": "string",
           "default": ""
+        }
+      }
+    },
+    "com.github.openshift.api.operator.v1alpha1.SecondarySchedulerList": {
+      "description": "KueueList contains a list of SecondaryScheduler",
+      "type": "object",
+      "required": [
+        "items"
+      ],
+      "properties": {
+        "apiVersion": {
+          "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+          "type": "string"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "default": {},
+            "$ref": "#/definitions/com.github.openshift.api.operator.v1alpha1.Kueue"
+          }
+        },
+        "kind": {
+          "description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+          "type": "string"
+        },
+        "metadata": {
+          "default": {},
+          "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ListMeta"
         }
       }
     },
@@ -47718,6 +47876,59 @@
       "description": "IntOrString is a type that can hold an int32 or a string.  When used in JSON or YAML marshalling and unmarshalling, it produces or consumes the inner type.  This allows you to have, for example, a JSON field that can accept a name or number.",
       "type": "string",
       "format": "int-or-string"
+    },
+    "io.k8s.apimachinery.pkg.version.Info": {
+      "description": "Info contains versioning information. how we'll want to distribute that information.",
+      "type": "object",
+      "required": [
+        "major",
+        "minor",
+        "gitVersion",
+        "gitCommit",
+        "gitTreeState",
+        "buildDate",
+        "goVersion",
+        "compiler",
+        "platform"
+      ],
+      "properties": {
+        "buildDate": {
+          "type": "string",
+          "default": ""
+        },
+        "compiler": {
+          "type": "string",
+          "default": ""
+        },
+        "gitCommit": {
+          "type": "string",
+          "default": ""
+        },
+        "gitTreeState": {
+          "type": "string",
+          "default": ""
+        },
+        "gitVersion": {
+          "type": "string",
+          "default": ""
+        },
+        "goVersion": {
+          "type": "string",
+          "default": ""
+        },
+        "major": {
+          "type": "string",
+          "default": ""
+        },
+        "minor": {
+          "type": "string",
+          "default": ""
+        },
+        "platform": {
+          "type": "string",
+          "default": ""
+        }
+      }
     }
   }
 }
